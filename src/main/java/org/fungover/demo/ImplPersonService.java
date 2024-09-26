@@ -1,9 +1,6 @@
 package org.fungover.demo;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.inject.Alternative;
-import jakarta.enterprise.inject.Default;
 import jakarta.inject.Named;
 
 import java.util.List;
