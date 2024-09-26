@@ -1,0 +1,20 @@
+### GET request to example server
+GET http://localhost:8080/demo-1.0-SNAPSHOT/api/hello-world
+
+###
+GET http://localhost:8080/demo-1.0-SNAPSHOT/api/persons
+
+###
+GET http://localhost:8080/demo-1.0-SNAPSHOT/api/persons/3
+
+###
+POST http://localhost:8080/demo-1.0-SNAPSHOT/api/persons
+Content-Type: application/json
+
+{
+      "age": 3,
+      "name": "NewName"
+}
+
+###
+GET http://localhost:8080/demo-1.0-SNAPSHOT/api/search?text=kalle&pages=23
