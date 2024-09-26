@@ -8,7 +8,7 @@ public class Annotation {
         //Get Class object from classname
         var classInfo = HelloResource.class;
         //Get Class object from object ref
-        var objectClassInfo = new HelloResource().getClass();
+        //var objectClassInfo = new HelloResource().getClass();
 
         System.out.println(classInfo.getMethods().length);
         for (var method : classInfo.getMethods()) {
