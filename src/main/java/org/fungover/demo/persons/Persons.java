@@ -1,4 +1,4 @@
-package org.fungover.demo;
+package org.fungover.demo.persons;
 
 import java.util.List;
 

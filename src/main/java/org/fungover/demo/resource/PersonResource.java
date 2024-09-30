@@ -1,21 +1,26 @@
-package org.fungover.demo;
+package org.fungover.demo.resource;
 
-import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.fungover.demo.persons.Person;
+import org.fungover.demo.persons.Persons;
+import org.fungover.demo.service.PersonService;
+
+import java.net.URI;
 
 @Path("/")
-public class HelloResource {
+public class PersonResource {
     private PersonService personService;
 
-    public HelloResource() {}
+    public PersonResource() {
+    }
 
     //Constructor injection. Prefer over field injection. Better for testing.
     @Inject
-    public HelloResource(@Named("Impl") PersonService personService) {
+    public PersonResource(@Named("Impl") PersonService personService) {
         System.out.println("HelloResource object created");
         this.personService = personService;
     }
@@ -50,8 +55,9 @@ public class HelloResource {
     @Path("/persons")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String names(Person persons) {
-        return persons.name();
+    public Response names(Person person) {
+        personService.addPerson(person);
+        return Response.created(URI.create("/api/persons/" + personService.getCount())).build();
     }
 
     @GET
