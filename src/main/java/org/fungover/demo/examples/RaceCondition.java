@@ -1,4 +1,4 @@
-package org.fungover.demo;
+package org.fungover.demo.examples;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
