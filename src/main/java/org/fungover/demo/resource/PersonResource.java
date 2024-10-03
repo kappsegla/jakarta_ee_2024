@@ -2,6 +2,7 @@ package org.fungover.demo.resource;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -56,7 +57,7 @@ public class PersonResource {
             return Response.ok().entity(new Person("Kalle", 12)).build();
         if (id.equals("2"))
             return Response.ok().entity(new Person("Anna", 3)).build();
-        logger.error("Invalid id {}", id);
+        logger.error("Invalid id " + id);
         return Response.status(Response.Status.NOT_FOUND).header("Custom-error", "Try again").build();
     }
 
@@ -65,9 +66,13 @@ public class PersonResource {
     @Path("/persons")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response names(Person person) {
+    public Response names(@Valid Person person) {
+//        if( person.name().isBlank() || person.age() < 0 )
+//            return Response.status(Response.Status.BAD_REQUEST).build();
+        //throw new WebApplicationException(Response.Status.BAD_REQUEST);
+
         personService.addPerson(person);
-        return Response.created(URI.create("/api/persons/" + personService.getCount())).build();
+        return Response.created(URI.create("/persons/" + personService.getCount())).build();
     }
 
     @GET
