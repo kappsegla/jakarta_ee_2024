@@ -2,6 +2,7 @@ package org.fungover.demo.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
+import jakarta.ws.rs.NotFoundException;
 import org.fungover.demo.persons.Person;
 
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class ImplPersonService implements PersonService {
     }
 
     public List<Person> getAllPersons() {
-        throw new IllegalStateException();
+        throw new NotFoundException();
+        //throw new IllegalPersonLibraryStateException();
         // return List.copyOf(persons);
     }
 
