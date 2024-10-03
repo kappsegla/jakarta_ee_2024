@@ -4,8 +4,10 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.fungover.demo.interceptor.Log;
 import org.fungover.demo.persons.Person;
 import org.fungover.demo.persons.Persons;
@@ -23,6 +25,9 @@ public class PersonResource {
     private static final Logger logger = LoggerFactory.getLogger(PersonResource.class);
 
     private PersonService personService;
+
+    @Context
+    private UriInfo uriInfo;
 
     public PersonResource() {
     }
@@ -66,13 +71,23 @@ public class PersonResource {
     @Path("/persons")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response names(@Valid Person person) {
+    public Response names(@Valid Person person, @HeaderParam("X-Forwarded-Proto") String proto) {
 //        if( person.name().isBlank() || person.age() < 0 )
 //            return Response.status(Response.Status.BAD_REQUEST).build();
         //throw new WebApplicationException(Response.Status.BAD_REQUEST);
 
         personService.addPerson(person);
-        return Response.created(URI.create("/persons/" + personService.getCount())).build();
+
+        //All this code is to handle the case of running behind reverse proxy gateway
+        if (proto == null) {
+            proto = uriInfo.getRequestUri().getScheme(); // Fallback to request scheme
+        }
+
+        URI baseUri = uriInfo.getBaseUri();
+        String fullPath = baseUri.getPath() + "persons/" + personService.getCount();
+        URI location = URI.create(proto + "://" + baseUri.getHost() + (baseUri.getPort() != -1 ? ":" + baseUri.getPort() : "") + fullPath);
+
+        return Response.created(location).build();
     }
 
     @GET

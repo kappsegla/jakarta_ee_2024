@@ -12,8 +12,8 @@ POST http://localhost:8080/jakartaEE-1.0-SNAPSHOT/api/persons
 Content-Type: application/json
 
 {
-  "age": -1,
-      "name": "NewName"
+  "age": 18,
+  "name": "NewName"
 }
 
 ###
