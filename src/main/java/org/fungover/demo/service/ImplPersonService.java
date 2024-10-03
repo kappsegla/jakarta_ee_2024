@@ -22,7 +22,8 @@ public class ImplPersonService implements PersonService {
     }
 
     public List<Person> getAllPersons() {
-        return List.copyOf(persons);
+        throw new IllegalStateException();
+        // return List.copyOf(persons);
     }
 
     @Override
