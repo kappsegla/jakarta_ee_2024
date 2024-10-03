@@ -5,14 +5,22 @@ import jakarta.inject.Named;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.fungover.demo.interceptor.Log;
 import org.fungover.demo.persons.Person;
 import org.fungover.demo.persons.Persons;
 import org.fungover.demo.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
 @Path("/")
+@Log
 public class PersonResource {
+
+    // Create a logger
+    private static final Logger logger = LoggerFactory.getLogger(PersonResource.class);
+
     private PersonService personService;
 
     public PersonResource() {
@@ -29,6 +37,7 @@ public class PersonResource {
     @Path("/hello-world")
     @Produces("text/plain")
     public String hello() {
+        //logger.info("This is an info message");
         return "Hello Mars";
     }
 
@@ -47,6 +56,7 @@ public class PersonResource {
             return Response.ok().entity(new Person("Kalle", 12)).build();
         if (id.equals("2"))
             return Response.ok().entity(new Person("Anna", 3)).build();
+        logger.error("Invalid id {}", id);
         return Response.status(Response.Status.NOT_FOUND).header("Custom-error", "Try again").build();
     }
 
