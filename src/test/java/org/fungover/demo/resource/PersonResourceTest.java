@@ -2,8 +2,10 @@ package org.fungover.demo.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.ExceptionMapper;
+import org.assertj.core.api.Assertions;
 import org.fungover.demo.exceptionmapper.IllegalPersonLibraryStateException;
 import org.fungover.demo.exceptionmapper.IllegalPersonLibraryStateExceptionMapper;
 import org.fungover.demo.persons.Person;
@@ -17,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,5 +63,20 @@ class PersonResourceTest {
         dispatcher.invoke(request, response);
         // Assert the response status code and content
         assertEquals(201, response.getStatus());
+    }
+
+    @Test
+    void shouldHaveVerifyAnnotationOnPersonParameter() throws NoSuchMethodException {
+        // Get the method
+        Method method = PersonResource.class.getMethod("names", Person.class, String.class);
+
+        // Get the parameters of the method
+        Parameter[] parameters = method.getParameters();
+
+        // Check if the first parameter has the @Verify annotation
+        boolean isAnnotationPresent = parameters[0].isAnnotationPresent(Valid.class);
+
+        // Assert using AssertJ
+        Assertions.assertThat(isAnnotationPresent).isTrue();
     }
 }
