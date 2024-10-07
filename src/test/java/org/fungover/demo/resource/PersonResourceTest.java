@@ -15,8 +15,12 @@ import org.jboss.resteasy.mock.MockDispatcherFactory;
 import org.jboss.resteasy.mock.MockHttpRequest;
 import org.jboss.resteasy.mock.MockHttpResponse;
 import org.jboss.resteasy.spi.Dispatcher;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
@@ -63,6 +67,24 @@ class PersonResourceTest {
         dispatcher.invoke(request, response);
         // Assert the response status code and content
         assertEquals(201, response.getStatus());
+    }
+
+    @Test
+    void getAllPersonsGivesJsonObject() throws URISyntaxException, UnsupportedEncodingException, JSONException {
+        MockHttpRequest request = MockHttpRequest.get("/persons");
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+        // Assert the response status code and content
+        assertEquals(200, response.getStatus());
+        String jsonBody = response.getContentAsString();
+        String expectedJson = """
+                {"persons":[],"statusCode":"Updated"}""";
+        //https://www.baeldung.com/jsonassert
+        //Assert on json content
+        JSONObject expected = new JSONObject();
+        JSONObject actual = new JSONObject(jsonBody);
+        expected.put("statusCode", "Updated");
+        JSONAssert.assertEquals(expected, actual, JSONCompareMode.LENIENT);
     }
 
     @Test
