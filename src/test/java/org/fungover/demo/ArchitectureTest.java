@@ -6,7 +6,7 @@ import com.tngtech.archunit.lang.ArchRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
 
@@ -15,8 +15,8 @@ public class ArchitectureTest {
     void ruleResourcelayerOnlyDependesOnServiceLayer() {
         JavaClasses importedClasses = new ClassFileImporter().importPackages("org.fungover.demo");
 
-        ArchRule rule = classes().that().haveNameMatching(".*Resource")
-                .should().onlyHaveDependentClassesThat().resideInAPackage("org.fungover.demo.service");
+        ArchRule rule = noClasses().that().resideInAPackage("..resource..")
+                .should().dependOnClassesThat().resideInAPackage("..invalid..");
 
         rule.check(importedClasses);
     }
