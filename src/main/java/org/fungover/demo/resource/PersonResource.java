@@ -1,7 +1,6 @@
 package org.fungover.demo.resource;
 
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -34,7 +33,7 @@ public class PersonResource {
 
     //Constructor injection. Prefer over field injection. Better for testing.
     @Inject
-    public PersonResource(@Named("Impl") PersonService personService) {
+    public PersonResource(PersonService personService) {
         System.out.println("HelloResource object created");
         this.personService = personService;
     }
